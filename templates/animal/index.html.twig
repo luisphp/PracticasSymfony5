@@ -1,0 +1,7 @@
+<h1>Todos los animales</h1>
+
+<ul>
+    {% for animal in animales %}
+    <li>{{ animal.tipo|raw }}</li>
+    {% endfor %}
+</ul>

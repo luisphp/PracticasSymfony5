@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> {% block titulo %} Inicio {% endblock %} Master PHP</title>
+</head>
+
+<body>
+
+    <div id="header">
+        {% block cabecera %}
+        <h1>Cabecera de la plantilla</h1>
+        {% endblock %}
+
+    </div>
+    <hr>
+    <section id="content">
+
+        {% block contenido %}
+        <p>Contenido por defecto</p>
+        {% endblock %}
+    </section>
+    <hr>
+    <footer>
+        {% block footer %}
+        <h1>Footer</h1>
+        {% endblock %}
+    </footer>
+
+
+
+
+</body>
+
+</html>
