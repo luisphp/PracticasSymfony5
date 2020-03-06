@@ -6,6 +6,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
 use App\Entity\Animal;
+use App\Repository\AnimalRepository;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\HttpFoundation\Request;
 
 class AnimalController extends AbstractController
 {
@@ -33,23 +37,45 @@ class AnimalController extends AbstractController
         //                   die();
         
         //DQL:
-        $dql = "SELECT a FROM App\Entity\Animal a WHERE a.raza = 'Boxer'";
-        $query = $em->createQuery($dql);                  
-        $resultset = $query->execute();
+        //$dql = "SELECT a FROM App\Entity\Animal a WHERE a.raza = 'Boxer'";
+        //$query = $em->createQuery($dql);                  
+        //$resultset = $query->execute();
 
         //Pure SQL
-        $connection = $this->getDoctrine()->getConnection();
-        $sql = 'SELECT * FROM animales ORDER BY id DESC';
-        $prepare = $connection->prepare($sql);
-        $resultset = $prepare->fecth();
-        var_dump($prepare);
+        // $connection = $this->getDoctrine()->getConnection();
+        // $sql = 'SELECT * FROM animales';
+        // $prepare = $connection->prepare($sql);
+        // $prepare->execute();
+        // $resultset = $prepare->fetchAll();
+        // var_dump($resultset);
+        // die();
+
+        $todos_animales = $animal_repo->findOneByRaza(['DESC']);
+        var_dump($todos_animales);
         die();
-
-
 
         return $this->render('animal/index.html.twig', [
             'animales' => $animales,
         ]);
+    }
+
+    public function crear_animal(){
+
+        //Formulario para crear animales
+        $animal = new Animal();
+        $form = $this->createFormBuilder()
+                     ->setAction($this->generateUrl('animal_save'))
+                     ->setMethod('POST')
+                     ->add('tipo', textType::class)
+                     ->add('raza', textType::class)
+                     ->add('color', textType::class)
+                     ->add('submit', textType::class)
+                     ->getForm();
+
+
+
+        return $this->render('animal/create.html.twig', ['form' => $form->createView()]);
+
     }
 
     public function update($id)
