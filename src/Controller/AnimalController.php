@@ -10,6 +10,7 @@ use App\Repository\AnimalRepository;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 class AnimalController extends AbstractController
 {
@@ -50,32 +51,13 @@ class AnimalController extends AbstractController
         // var_dump($resultset);
         // die();
 
-        $todos_animales = $animal_repo->findOneByRaza(['DESC']);
+       /*  $todos_animales = $animal_repo->findOneByRaza(['DESC']);
         var_dump($todos_animales);
-        die();
+        die(); */
 
         return $this->render('animal/index.html.twig', [
             'animales' => $animales,
         ]);
-    }
-
-    public function crear_animal(){
-
-        //Formulario para crear animales
-        $animal = new Animal();
-        $form = $this->createFormBuilder()
-                     ->setAction($this->generateUrl('animal_save'))
-                     ->setMethod('POST')
-                     ->add('tipo', textType::class)
-                     ->add('raza', textType::class)
-                     ->add('color', textType::class)
-                     ->add('submit', textType::class)
-                     ->getForm();
-
-
-
-        return $this->render('animal/create.html.twig', ['form' => $form->createView()]);
-
     }
 
     public function update($id)
@@ -112,6 +94,65 @@ class AnimalController extends AbstractController
     public function save(){
 
         //Guardar en una tabla de la base de datos
+        
+        $entity_manager = $this->getDoctrine()->getManager();
+
+        $animal = new Animal();
+        $animal->setTipo('Canino');
+        $animal->setColor('Marron con manchas');
+        $animal->setRaza('Boxer');
+        
+        //guardar objeto en doctrine que seria lo mismo que persistir el objeto
+
+        $entity_manager->persist($animal);
+
+        //Volcar datos en la tabla
+         $entity_manager->flush();
+
+        return new Response('El animal guardado tiene el ID'.$animal->getId());  
+    }
+
+    public function crear_animal(Request $request){
+
+        //Formulario para crear animales
+        $animal = new Animal();
+        $form = $this->createFormBuilder($animal)
+                     //->setAction($this->generateUrl('animal_guardar'))
+                     //->setMethod('POST')
+                     ->add('tipo', textType::class)
+                     ->add('raza', textType::class)
+                     ->add('color', textType::class)
+                     ->add('submit', SubmitType::class,['label'=>'Crear animal', 'attr' => ['class' => 'btn btn-success']])
+                     ->getForm();
+
+        $form->handleRequest($request);
+        if($form->isSubmitted() && $form->isValid()){
+            //var_dump($animal);
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($animal);
+            $em->flush();
+
+            //SEsion flashs
+            $session = new Session();
+            //$session->start();
+            $session->getFlashBag()->add('message', 'Animal creado');
+
+            return $this->redirectToRoute('animal_create');
+
+        }             
+
+
+        return $this->render('animal/create.html.twig', ['form' => $form->createView()]);
+
+    }    
+
+    public function guardar_animal(Request $request){
+
+        //Guardar en una tabla de la base de datos
+
+        $request->get('tipo');
+        var_dump($request->get('form'));
+        die();
         
         $entity_manager = $this->getDoctrine()->getManager();
 
@@ -167,5 +208,5 @@ class AnimalController extends AbstractController
              
         return new Response($message);
         
-    }        
+    }    
 }

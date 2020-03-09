@@ -1,1 +1,14 @@
-<h1>Crear un nuevo registro para animal</h1>
+{% extends "layouts/sitio.html.twig" %} {% block content %}
+<div class="container">
+    <h1>Formulario para creacion de nuevo registro animal</h1>
+    <br> {% for message in app.flashes('message') %}
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+
+        <strong> {{ message }}</strong>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    {% endfor %}
+    <br>
+    <br> {{form_start(form)}} {{form_widget(form)}} {{form_end(form)}}</div> {% endblock %}

@@ -3,12 +3,15 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+
+
 
 /**
  * Animales
  *
  * @ORM\Table(name="animales")
- * @ORM\Entity(repositoryClass= App\Repository\AnimalRepository)
+ * @ORM\Entity(repositoryClass = "App\Repository\AnimalRepository")
  */
 class Animal
 {
@@ -24,6 +27,7 @@ class Animal
     /**
      * @var string
      *
+     * @Assert\NotBlank
      * @ORM\Column(name="tipo", type="string", length=255, nullable=false)
      */
     private $tipo;
@@ -31,6 +35,7 @@ class Animal
     /**
      * @var string
      *
+     * @Assert\NotBlank
      * @ORM\Column(name="color", type="string", length=255, nullable=false)
      */
     private $color;
@@ -38,6 +43,7 @@ class Animal
     /**
      * @var string
      *
+     * @Assert\NotBlank
      * @ORM\Column(name="raza", type="string", length=255, nullable=false)
      */
     private $raza;

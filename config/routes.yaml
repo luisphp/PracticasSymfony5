@@ -24,15 +24,28 @@ animal_detail:
    path: /animal/show/{id}
    controller: App\Controller\AnimalController::show
 
-#Ruta par aactualizar un animal   
+#Ruta para actualizar un animal   
 animal_update:
    path: /animal/update/{id}
    controller: App\Controller\AnimalController::update
 
-#Ruta para eliminar un animal enespecifico
+#Ruta para eliminar un animal en especifico
 animal_delete:
    path: /animal/delete/{id}
    controller: App\Controller\AnimalController::delete
+
+#Ruta para crear un nuevo animal
+animal_create:
+   path: /animal/crear
+   controller: App\Controller\AnimalController::crear_animal
+
+
+#Ruta para recibir datos del formulario y crear nuevo animal
+animal_guardar:
+   path: /animal/guardar
+   controller: App\Controller\AnimalController::guardar_animal
+   methods: [POST]
+
    
 
    
